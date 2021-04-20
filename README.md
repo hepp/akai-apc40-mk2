@@ -1,3 +1,4 @@
+
 # akai-apc40-mk2
 
 *Akai APC40 MK2: Outgoing MIDI API Messaging + Color Utils*
@@ -12,7 +13,7 @@ Wrote this for a project that required full outgoing RGB control (PC/Host -> Aka
 - Control all light sources (everything), using the official outgoing MIDI protocol.
 - Switch on the fly between the (3) firmware modes. 
 - Control all (8) Bi Color buttons, with Off/Yellow/Orange support.
-- Control all (16) LED knobs, including switching between Default, Pan, and Volume modes.
+- Control all (16) LED knobs, including switching between Default, Pan, and Volume "styles".
 - Control all (45) RBG LED pads, including switching between Solid, Oneshot, Pulse, Blink modes.
 - Blinking/Pulse modes for 1/1, 1/2, 1/4, 1/8, 1/16, 1/24 support.
 - Control LED diodes for Play, Record, Session.
@@ -27,11 +28,44 @@ Based on the: Akai APC40 Mk2 Communications Protocol Version 1.2
 https://www.akaipro.com/amfile/file/download/file/495/product/15
 
 
+### Firmware Modes (3)
+
+**Notes Regarding Generic Mode (Mode 0):** 
+
+- [CLIP LAUNCH] buttons are momentary and should light its LED when ON.
+- [CLIP STOP] buttons are momentary and should light its LED when ON. -[ACTIVATOR], [SOLO], [RECORD ARM] are toggle buttons and should light its LED when ON.
+- [TRACK SELECTION] buttons (1-8 + MASTER) are radio style and only one of the 9 buttons is ON at a time. When ON its LED should light. These buttons will NOT send out MIDI in generic mode for its state. These buttons dictate which one of nine banks the DEVICE CONTROL knobs and DEVICE CONTROL switches belong to. These knobs and switches will output on a different MIDI channel based on the current Track Selection (track 1 = MIDI channel 0, track 8 = MIDI channel 7, MASTER = MIDI channel 8). Upon pressing one of the Track Selection buttons, the current position of the 8 Device Control knobs will be sent. 
+- [TRACK ACTIVATOR] buttons (1-8) are toggle buttons and will light its LED when ON.
+- [CROSSFADER A/B], is a momentary button and will light its LED when ON
+- [TRACK SOLO], and [RECORD ARM] buttons are toggle buttons and will light its LED when ON
+- [DEVICE LEFT (1)], [DEVICE RIGHT (2)], [BANK LEFT (3)], [BANK RIGHT (4)] will be toggle style and will light its LED when ON.
+- [DEVICE ON/OFF (5)], [DEVICE LOCK (6)], [CLIP/DEVICE VIEW (7)], [DETAIL VIEW (8)] will be momentary style and will light its LED when ON.
+- [BANK LOCK] button is momentary and will light its LED when ON.
+- [SCENE LAUNCH] and [STOP ALL CLIPS] buttons are momentary buttons and will light its LED when ON.
+- TRACK CONTROL buttons are toggle buttons and will light its LED when ON.
+- TRACK CONTROL KNOBS and buttons are NOT banked in any way.
+- [UP], [DOWN], [LEFT], [RIGHT], [SHIFT], [NUDGE+], [NUDGE-], [METRONOME], and [TAP TEMPO] are momentary buttons
+- [PLAY], [RECORD], and [SESSION RECORD] are momentary buttons and will light its LED when ON.
+- [PAN], [SENDS], [USER], are toggle buttons and will light its LED when ON.
+- LED rings are all set to SINGLE style.
+
+**Notes Regarding Ableton Live Mode (Mode 1):**
+
+- All buttons are momentary buttons.
+- Device control knobs and buttons are not banked within the APC40 Mk2.
+- LED Rings around the knobs are controlled by the APC40 but can be updated by the Host.
+- All other LEDs are controlled by the Host.
+
+**Notes Regarding Alternate Ableton Live Mode (Mode 2):**
+- All buttons are momentary buttons.
+- Device control knobs and buttons are not banked within the APC40 Mk2.
+- All LEDs are controlled by the Host.
+
 ### Dependencies
 
 None: This class is currently hardwired to point to [MidiBus](http://www.smallbutdigital.com/projects/themidibus/), however it could easily be exchanged for another Midi API.
 
-All touch points for the outgoing API are routed to these 3 methods:
+All touch points for the outgoing API are routed through 3 methods, outlined below:
 
 ```
 private static void midiSendMessage(MidiBus midiBus, byte[] data) {
@@ -47,7 +81,8 @@ private static void midiSendControllerChange(MidiBus midiBus, int channel, int p
 }
 ```
 
-Update them to send the commands to any MIDI API.
+Update these methods (exchange MidiBus class), to send all the commands to another API.
+
 
 ### LED Map
 
