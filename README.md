@@ -29,7 +29,25 @@ https://www.akaipro.com/amfile/file/download/file/495/product/15
 
 ### Dependencies
 
-None - however this class is currently hardwired to point to [MidiBus](http://www.smallbutdigital.com/projects/themidibus/), however it could easily be exchanged for another Midi API.
+None: This class is currently hardwired to point to [MidiBus](http://www.smallbutdigital.com/projects/themidibus/), however it could easily be exchanged for another Midi API.
+
+All touch points for the outgoing API are routed to these 3 methods:
+
+```
+private static void midiSendMessage(MidiBus midiBus, byte[] data) {
+	midiBus.sendMessage(data);
+}
+
+private static void midiSendNoteOn(MidiBus midiBus, int channel, int pitch, int velocity) {
+	midiBus.sendNoteOn(channel, pitch, velocity);
+}
+
+private static void midiSendControllerChange(MidiBus midiBus, int channel, int pitch, int velocity) {
+	midiBus.sendControllerChange(channel, pitch, velocity);
+}
+```
+
+Update them to send the commands to any MIDI API.
 
 ### LED Map
 
