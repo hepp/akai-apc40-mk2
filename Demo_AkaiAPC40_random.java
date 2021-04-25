@@ -1,13 +1,7 @@
-package com.haxademic.demo.hardware.midi;
-import com.haxademic.core.app.PAppletHax;
-
 import themidibus.MidiBus;
 import themidibus.MidiListener;
 
-public class Demo_AkaiAPC40_random
-extends PAppletHax implements MidiListener {
-	public static void main(String args[]) { arguments = args; PAppletHax.main(Thread.currentThread().getStackTrace()[1].getClassName()); }
-
+public class Demo_AkaiAPC40_random {
 	protected MidiBus midiBus;
 	
 	// Animation properties for quick testing
@@ -19,7 +13,6 @@ extends PAppletHax implements MidiListener {
 	private boolean onToggle2 = false;
 
 	protected void firstFrame() {
-		p.frameRate(12);
 		
 		MidiBus.list();
 		midiBus = new MidiBus(this, 0, 3);
@@ -34,7 +27,6 @@ extends PAppletHax implements MidiListener {
 	}
 	
 	protected void drawApp() {
-		p.background(0);
 		
 		// Test RBG Pads
 		int colorCode = (int) (Math.random()*AkaiAPC40Utils.COLORCODE_COUNT);
